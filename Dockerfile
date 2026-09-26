@@ -1,3 +1,19 @@
-FROM dmstraub/gramps-webapi:latest
-COPY dist /app/static
+FROM node:20-slim AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+FROM nginx:stable-alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY ./default.conf.template /etc/nginx/templates/
 LABEL org.opencontainers.image.source="https://github.com/gramps-project/gramps-web"
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
