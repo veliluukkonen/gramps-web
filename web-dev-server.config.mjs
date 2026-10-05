@@ -18,7 +18,13 @@ function apiProxy(ctx, next) {
     return next()
   }
   return new Promise(resolve => {
-    const headers = {...ctx.req.headers, host: apiTarget.host}
+    // Keep the browser's Host so the backend builds links (e-mails) that
+    // point back to the dev server, like nginx does in production.
+    const headers = {
+      ...ctx.req.headers,
+      'x-forwarded-host': ctx.host,
+      'x-forwarded-proto': ctx.protocol,
+    }
     const proxyReq = http.request(
       {
         hostname: apiTarget.hostname,
