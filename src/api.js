@@ -3,7 +3,9 @@ import jwt_decode from 'jwt-decode'
 
 import {fireEvent} from './util.js'
 
-export const __APIHOST__ = 'http://localhost:5555'
+// Empty string = same origin. In development the web-dev-server proxies
+// /api to the backend (see web-dev-server.config.mjs); in production nginx does.
+export const __APIHOST__ = ''
 
 // Access token expiration time (15 minutes in milliseconds)
 export const ACCESS_TOKEN_EXPIRY_MS = 15 * 60 * 1000

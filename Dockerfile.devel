@@ -1,3 +1,18 @@
-FROM dmstraub/gramps-webapi:latest-devel
-COPY dist /app/static
-LABEL org.opencontainers.image.source="https://github.com/gramps-project/gramps-web"
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Kopioidaan package-tiedostot
+COPY gramps-web/package*.json ./
+
+# Asennetaan riippuvuudet
+RUN npm install
+
+# Kopioidaan kaikki koodi
+COPY gramps-web/ .
+
+# Avataan portti
+EXPOSE 8001
+
+# Käynnistetään palvelin
+CMD ["npm", "start"]
