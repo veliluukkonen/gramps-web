@@ -277,5 +277,12 @@
   "Uploading file %s of %s": "Uploading file %s of %s",
   "Select files": "Select files",
   "Failed to upload": "Failed to upload",
-  "Failed to update": "Failed to update"
+  "Failed to update": "Failed to update",
+  "%s similar people already exist": "%s similar people already exist",
+  "More than %s similar people found. Refine the name.": "More than %s similar people found. Refine the name.",
+  "This is the same person": "This is the same person",
+  "Open in new tab": "Open in new tab",
+  "%s similar people already exist. Do you want to add this person anyway?": "%s similar people already exist. Do you want to add this person anyway?",
+  "Add anyway": "Add anyway",
+  "One similar person already exists": "One similar person already exists"
 }

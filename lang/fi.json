@@ -254,5 +254,12 @@
     "Please select a different person.": "Valitse toinen henkilö.",
     "No Y-DNA data found.": "Y-DNA-tietoja ei löytynyt.",
     "Edit Y-DNA data": "Muokkaa Y-DNA-tietoja",
-    "Account Source": "Tilin lähde"
+    "Account Source": "Tilin lähde",
+    "%s similar people already exist": "%s samankaltaista henkilöä on jo olemassa",
+    "More than %s similar people found. Refine the name.": "Yli %s samankaltaista henkilöä. Tarkenna nimeä.",
+    "This is the same person": "Tämä on sama henkilö",
+    "Open in new tab": "Avaa uudessa välilehdessä",
+    "%s similar people already exist. Do you want to add this person anyway?": "Samankaltaisia henkilöitä on jo olemassa (%s). Lisätäänkö henkilö silti?",
+    "Add anyway": "Lisää silti",
+    "One similar person already exists": "Yksi samankaltainen henkilö on jo olemassa"
 }

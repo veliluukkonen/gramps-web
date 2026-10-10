@@ -1,11 +1,12 @@
 import {html} from 'lit'
 
-import {makeHandle, dateIsEmpty, emptyDate} from '../util.js'
+import {makeHandle, dateIsEmpty, emptyDate, fireEvent} from '../util.js'
 
 import '../components/GrampsjsFormSelectObjectList.js'
 import '../components/GrampsjsFormSelectDate.js'
 import '../components/GrampsjsFormName.js'
 import '../components/GrampsjsFormPrivate.js'
+import '../components/GrampsjsSimilarPeople.js'
 
 const dataDefault = {_class: 'Person', gender: 2, citation_list: []}
 
@@ -29,6 +30,8 @@ export const GrampsjsNewPersonMixin = superClass =>
           id="primary-name"
           .appState="${this.appState}"
         ></grampsjs-form-name>
+
+        ${this._renderSimilarPeople()}
 
         <h4 class="label">${this._('Gender')}</h4>
         <mwc-select id="select-confidence" @change="${this.handleGender}">
@@ -90,6 +93,38 @@ export const GrampsjsNewPersonMixin = superClass =>
           .appState="${this.appState}"
         ></grampsjs-form-private>
       `
+    }
+
+    _renderSimilarPeople() {
+      const name = this.data.primary_name || {}
+      const surname = name.surname_list?.[0]?.surname || ''
+      const birthYear = this.data.birth?.date?.dateval?.[2] || null
+      return html`
+        <grampsjs-similar-people
+          id="similar-people"
+          .appState="${this.appState}"
+          firstName="${name.first_name || ''}"
+          surname="${surname}"
+          .birthYear="${birthYear}"
+          .gender="${this.data.gender}"
+          @similar:changed="${this._handleSimilarChanged}"
+          @similar:selected="${this._handleSimilarSelected}"
+        ></grampsjs-similar-people>
+      `
+    }
+
+    _handleSimilarChanged(e) {
+      this._similarCount = e.detail.count
+    }
+
+    _handleSimilarSelected(e) {
+      // The person already exists: abandon the form and open the existing one.
+      this._reset()
+      fireEvent(this, 'nav', {path: `person/${e.detail.grampsId}`})
+    }
+
+    get similarCount() {
+      return this._similarCount || 0
     }
 
     _renderCitationForm() {
@@ -157,6 +192,8 @@ export const GrampsjsNewPersonMixin = superClass =>
     _reset() {
       super._reset()
       this.data = dataDefault
+      this._similarCount = 0
+      this.shadowRoot?.querySelector('#similar-people')?.reset()
     }
 
     _processedData() {
