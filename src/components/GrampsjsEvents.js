@@ -57,9 +57,12 @@ export class GrampsjsEvents extends GrampsjsEditableList {
     return html`
       ${obj.profile.type}
       ${!obj.profile?.role ||
-      ['Primary', 'Family', this._('Primary'), this._('Family')].includes(
-        obj.profile?.role
-      )
+      [
+        'Primary',
+        'Family',
+        this._('Role|Primary'),
+        this._('Role|Family'),
+      ].includes(obj.profile?.role)
         ? ''
         : `(${obj.profile?.role})`}
     `
@@ -82,7 +85,7 @@ export class GrampsjsEvents extends GrampsjsEditableList {
   //       <td>
   //         ${prof.type}
   //         ${!prof?.role ||
-  //         ['Primary', 'Family', this._('Primary'), this._('Family')].includes(
+  //         ['Primary', 'Family', this._('Role|Primary'), this._('Role|Family')].includes(
   //           prof?.role
   //         )
   //           ? ''

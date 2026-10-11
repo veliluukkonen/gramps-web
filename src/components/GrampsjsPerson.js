@@ -92,7 +92,7 @@ export class GrampsjsPerson extends GrampsjsObject {
       <span class="event">
         <i>${crossIcon}</i>
         ${obj.date || ''} ${obj.place ? this._('in') : ''}
-        ${obj.place_name || obj.place || ''}
+        ${obj.place_name || obj.place || ''} ${obj.age ? `(${obj.age})` : ''}
       </span>
     `
   }

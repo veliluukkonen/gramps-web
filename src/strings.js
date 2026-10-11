@@ -631,6 +631,8 @@ export const grampsStrings = [
   'Preview',
   'Previous',
   'Primary',
+  'Role|Primary',
+  'Role|Family',
   'Print radial texts upright or roundabout',
   'Prints the year the event took place in the report',
   'Priority',

@@ -217,7 +217,9 @@ export class GrampsjsPersonTimeline extends GrampsjsAppStateMixin(LitElement) {
             ${
               // if role is not primary/family, show role
               obj.role &&
-              ![this._('Family'), this._('Primary')].includes(obj.role)
+              ![this._('Role|Family'), this._('Role|Primary')].includes(
+                obj.role
+              )
                 ? html`(${obj.role})`
                 : ''
             }

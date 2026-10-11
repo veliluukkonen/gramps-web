@@ -121,8 +121,8 @@ export class GrampsjsEvent extends GrampsjsObject {
   }
 
   _renderPrimaryPeople() {
-    const primary = this._('Primary')
-    const family = this._('Family')
+    const primary = this._('Role|Primary')
+    const family = this._('Role|Family')
     const people =
       this.data?.profile?.participants?.people.filter(
         obj => obj.role === primary || obj.role === 'Primary'
