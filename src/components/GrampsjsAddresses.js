@@ -114,7 +114,23 @@ export class GrampsjsAddresses extends GrampsjsAppStateMixin(LitElement) {
   // eslint-disable-next-line class-methods-use-this
   _toDate(dateVal) {
     try {
-      return `${dateVal[2]}-${dateVal[1]}-${dateVal[0]}`
+      const [day, month, year] = dateVal
+      if (!year && !month && !day) {
+        return ''
+      }
+      const lang = this.appState?.i18n?.lang || ''
+      if (lang.startsWith('fi')) {
+        // Finnish numeric format: 15.1.1900, 1.1900, 1900
+        return [day, month, year].filter(part => part).join('.')
+      }
+      const pad = n => `${n}`.padStart(2, '0')
+      if (!month) {
+        return `${year}`
+      }
+      if (!day) {
+        return `${year}-${pad(month)}`
+      }
+      return `${year}-${pad(month)}-${pad(day)}`
     } catch {
       return ''
     }
