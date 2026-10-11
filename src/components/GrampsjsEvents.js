@@ -6,6 +6,7 @@ import './GrampsjsFormSelectObject.js'
 import './GrampsjsFormEventRef.js'
 import './GrampsjsFormNewEvent.js'
 import './GrampsjsObjectForm.js'
+import './GrampsjsCitationLink.js'
 import '@material/mwc-icon-button'
 import '@material/mwc-button'
 
@@ -41,11 +42,20 @@ export class GrampsjsEvents extends GrampsjsEditableList {
       <mwc-list-item
         twoline
         graphic="avatar"
+        ?hasMeta="${obj.citation_list?.length > 0}"
         @click="${() => this._handleClick(obj.gramps_id)}"
       >
         ${this._getPrimaryText(objProfile)}
         <span slot="secondary">${this._getSecondaryText(objProfile)}</span>
         ${renderIcon({object: obj, object_type: 'event'})}
+        ${obj.citation_list?.length > 0
+          ? html`<span slot="meta"
+              ><grampsjs-citation-link
+                .appState="${this.appState}"
+                .citations="${obj.citation_list}"
+              ></grampsjs-citation-link
+            ></span>`
+          : ''}
       </mwc-list-item>
     `
   }

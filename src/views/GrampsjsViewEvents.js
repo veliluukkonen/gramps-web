@@ -8,6 +8,7 @@ import {prettyTimeDiffTimestamp, filterCounts} from '../util.js'
 import '../components/GrampsjsFilterType.js'
 import '../components/GrampsjsFilterYears.js'
 import '../components/GrampsjsFilterTags.js'
+import '../components/GrampsjsCitationLink.js'
 
 export class GrampsjsViewEvents extends GrampsjsViewObjectsBase {
   constructor() {
@@ -17,6 +18,7 @@ export class GrampsjsViewEvents extends GrampsjsViewObjectsBase {
       type: {title: 'Event Type', sort: 'type'},
       date: {title: 'Date', sort: 'date'},
       place: {title: 'Place', sort: 'place'},
+      citations: {title: 'Citations'},
       change: {title: 'Last changed', sort: 'change'},
     }
     this._objectsName = 'events'
@@ -25,7 +27,7 @@ export class GrampsjsViewEvents extends GrampsjsViewObjectsBase {
   get _fetchUrl() {
     return `/api/events/?locale=${
       this.appState.i18n.lang || 'en'
-    }&profile=self&keys=gramps_id,profile,change`
+    }&profile=self&keys=gramps_id,profile,change,citation_list`
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -72,6 +74,13 @@ export class GrampsjsViewEvents extends GrampsjsViewObjectsBase {
       type: row?.profile?.type,
       date: row?.profile?.date,
       place: row?.profile?.place_name || row?.profile?.place,
+      citations:
+        row?.citation_list?.length > 0
+          ? html`<grampsjs-citation-link
+              .appState="${this.appState}"
+              .citations="${row.citation_list}"
+            ></grampsjs-citation-link>`
+          : '',
       change: prettyTimeDiffTimestamp(row.change, this.appState.i18n.lang),
     }
     return formattedRow

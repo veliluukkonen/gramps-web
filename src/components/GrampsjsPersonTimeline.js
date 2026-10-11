@@ -7,6 +7,7 @@ import '@material/mwc-icon'
 import './GrampsjsMap.js'
 import './GrampsjsMapMarker.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
+import './GrampsjsCitationLink.js'
 
 export class GrampsjsPersonTimeline extends GrampsjsAppStateMixin(LitElement) {
   static get styles() {
@@ -223,6 +224,12 @@ export class GrampsjsPersonTimeline extends GrampsjsAppStateMixin(LitElement) {
                 ? html`(${obj.role})`
                 : ''
             }
+            ${obj.citation_list?.length > 0
+              ? html`<grampsjs-citation-link
+                  .appState="${this.appState}"
+                  .citations="${obj.citation_list}"
+                ></grampsjs-citation-link>`
+              : ''}
           </span>
           ${obj.description
             ? html`
