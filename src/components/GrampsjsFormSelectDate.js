@@ -126,34 +126,6 @@ class GrampsjsFormSelectDate extends GrampsjsAppStateMixin(LitElement) {
     </p>
     <p>
     <span class="dateform">
-      <mwc-textfield
-        @change="${this.handleYear1}"
-        id="year1"
-        label="${this._('Year')}"
-        type="number"
-        style="width: 6em;"
-        value="${this.data.dateval[2] || ''}"
-      ></mwc-textfield>
-      <mwc-select
-        @change="${this.handleMonth1}"
-        id="month1"
-        label="${this._('Month')}"
-        style="width: 6em;"
-        fixedMenuPosition
-      >${[...Array(13).keys()].map(
-        idx => html`
-          <mwc-list-item
-            value="${idx}"
-            ?selected="${
-              // eslint-disable-next-line eqeqeq
-              idx == (this.data.dateval[1] || 0)
-            }"
-          >
-            ${idx === 0 ? '' : idx}
-          </mwc-list-item>
-        `
-      )}
-      </mwc-select>
       <mwc-select
         @change="${this.handleDay1}"
         id="day1"
@@ -174,6 +146,34 @@ class GrampsjsFormSelectDate extends GrampsjsAppStateMixin(LitElement) {
         `
       )}
       </mwc-select>
+      <mwc-select
+        @change="${this.handleMonth1}"
+        id="month1"
+        label="${this._('Month')}"
+        style="width: 6em;"
+        fixedMenuPosition
+      >${[...Array(13).keys()].map(
+        idx => html`
+          <mwc-list-item
+            value="${idx}"
+            ?selected="${
+              // eslint-disable-next-line eqeqeq
+              idx == (this.data.dateval[1] || 0)
+            }"
+          >
+            ${idx === 0 ? '' : idx}
+          </mwc-list-item>
+        `
+      )}
+      </mwc-select>
+      <mwc-textfield
+        @change="${this.handleYear1}"
+        id="year1"
+        label="${this._('Year')}"
+        type="number"
+        style="width: 6em;"
+        value="${this.data.dateval[2] || ''}"
+      ></mwc-textfield>
 
       <input
         type="date"
@@ -196,34 +196,6 @@ class GrampsjsFormSelectDate extends GrampsjsAppStateMixin(LitElement) {
       <span class="dateform">
       &nbsp;&nbsp;&ndash;&nbsp;&nbsp;
 
-      <mwc-textfield
-        @change="${this.handleYear2}"
-        id="year2"
-        label="${this._('Year')}"
-        type="number"
-        style="width: 6em;"
-        value="${this.data.dateval[6] || ''}"
-      ></mwc-textfield>
-      <mwc-select
-        @change="${this.handleMonth2}"
-        id="month2"
-        label="${this._('Month')}"
-        style="width: 6em;"
-        fixedMenuPosition
-      >${[...Array(13).keys()].map(
-        idx => html`
-          <mwc-list-item
-            value="${idx}"
-            ?selected="${
-              // eslint-disable-next-line eqeqeq
-              idx == (this.data.dateval[5] || 0)
-            }"
-          >
-            ${idx === 0 ? '' : idx}
-          </mwc-list-item>
-        `
-      )}
-      </mwc-select>
       <mwc-select
         @change="${this.handleDay2}"
         id="day2"
@@ -244,6 +216,34 @@ class GrampsjsFormSelectDate extends GrampsjsAppStateMixin(LitElement) {
         `
       )}
       </mwc-select>
+      <mwc-select
+        @change="${this.handleMonth2}"
+        id="month2"
+        label="${this._('Month')}"
+        style="width: 6em;"
+        fixedMenuPosition
+      >${[...Array(13).keys()].map(
+        idx => html`
+          <mwc-list-item
+            value="${idx}"
+            ?selected="${
+              // eslint-disable-next-line eqeqeq
+              idx == (this.data.dateval[5] || 0)
+            }"
+          >
+            ${idx === 0 ? '' : idx}
+          </mwc-list-item>
+        `
+      )}
+      </mwc-select>
+      <mwc-textfield
+        @change="${this.handleYear2}"
+        id="year2"
+        label="${this._('Year')}"
+        type="number"
+        style="width: 6em;"
+        value="${this.data.dateval[6] || ''}"
+      ></mwc-textfield>
 
       <input
         type="date"
