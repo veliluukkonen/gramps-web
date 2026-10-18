@@ -53,6 +53,7 @@ export class GrampsjsSourceCitations extends GrampsjsEditableList {
         new
         @object:save="${this._handleCitSave}"
         @object:cancel="${this._handleCitCancel}"
+        @citation:existing="${this._handleExistingCit}"
         .appState="${this.appState}"
         dialogTitle=${this._('New Citation')}
       >
@@ -86,6 +87,16 @@ export class GrampsjsSourceCitations extends GrampsjsEditableList {
 
   _handleShareCitSave(e) {
     fireEvent(this, 'edit:action', {action: 'addCitation', data: e.detail.data})
+    e.preventDefault()
+    e.stopPropagation()
+    this.dialogContent = ''
+  }
+
+  _handleExistingCit(e) {
+    fireEvent(this, 'edit:action', {
+      action: 'addCitation',
+      data: {data: [e.detail.handle]},
+    })
     e.preventDefault()
     e.stopPropagation()
     this.dialogContent = ''

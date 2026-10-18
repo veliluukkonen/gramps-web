@@ -11,7 +11,9 @@ import '@material/mwc-button'
 import './GrampsjsFormSelectType.js'
 import './GrampsjsFormSelectObjectList.js'
 import './GrampsjsFormString.js'
+import './GrampsjsExistingCitations.js'
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
+import {fireEvent} from '../util.js'
 
 const confidence = {
   0: 'Very Low',
@@ -42,6 +44,14 @@ class GrampsjsFormNewCitation extends GrampsjsObjectForm {
       <p>
         <grampsjs-form-string fullwidth id="page"></grampsjs-form-string>
       </p>
+
+      <grampsjs-existing-citations
+        id="existing-citations"
+        .appState="${this.appState}"
+        sourceHandle="${this.data.source_handle || ''}"
+        page="${this.data.page || ''}"
+        @existing-citation:selected="${this._handleExistingSelected}"
+      ></grampsjs-existing-citations>
 
       <h4 class="label">${this._('Date')}</h4>
       <p>
@@ -79,6 +89,18 @@ class GrampsjsFormNewCitation extends GrampsjsObjectForm {
 
   handleConfidence(e) {
     this.data = {...this.data, confidence: parseInt(e.target.value, 10)}
+  }
+
+  _handleExistingSelected(e) {
+    // Link the existing citation instead of creating a duplicate.
+    fireEvent(this, 'citation:existing', {handle: e.detail.handle})
+    this._reset()
+  }
+
+  _reset() {
+    super._reset()
+    this.data = {_class: 'Citation', confidence: 2}
+    this.shadowRoot?.querySelector('#existing-citations')?.reset()
   }
 
   get isValid() {

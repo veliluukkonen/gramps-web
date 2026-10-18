@@ -5,7 +5,8 @@ import '@material/mwc-textfield'
 import {GrampsjsViewNewObject} from './GrampsjsViewNewObject.js'
 import '../components/GrampsjsFormString.js'
 import '../components/GrampsjsFormPrivate.js'
-import {emptyDate} from '../util.js'
+import '../components/GrampsjsExistingCitations.js'
+import {emptyDate, fireEvent} from '../util.js'
 
 export const confidence = {
   0: 'Very Low',
@@ -39,6 +40,14 @@ export class GrampsjsViewNewCitation extends GrampsjsViewNewObject {
       <p>
         <grampsjs-form-string fullwidth id="page"></grampsjs-form-string>
       </p>
+
+      <grampsjs-existing-citations
+        id="existing-citations"
+        .appState="${this.appState}"
+        sourceHandle="${this.data.source_handle || ''}"
+        page="${this.data.page || ''}"
+        @existing-citation:selected="${this._handleExistingSelected}"
+      ></grampsjs-existing-citations>
 
       <h4 class="label">${this._('Date')}</h4>
       <p>
@@ -100,10 +109,17 @@ export class GrampsjsViewNewCitation extends GrampsjsViewNewObject {
     this.checkFormValidity()
   }
 
+  _handleExistingSelected(e) {
+    // The citation already exists: abandon the form and open the existing one.
+    this._reset()
+    fireEvent(this, 'nav', {path: `citation/${e.detail.grampsId}`})
+  }
+
   _reset() {
     super._reset()
     this.isFormValid = false
     this.data = {_class: 'Citation', confidence: 2}
+    this.shadowRoot?.querySelector('#existing-citations')?.reset()
   }
 }
 

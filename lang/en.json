@@ -284,5 +284,7 @@
   "Open in new tab": "Open in new tab",
   "%s similar people already exist. Do you want to add this person anyway?": "%s similar people already exist. Do you want to add this person anyway?",
   "Add anyway": "Add anyway",
-  "One similar person already exists": "One similar person already exists"
+  "One similar person already exists": "One similar person already exists",
+  "A citation with this page already exists for the source": "A citation with this page already exists for the source",
+  "Use this citation": "Use this citation"
 }

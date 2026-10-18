@@ -261,5 +261,7 @@
     "Open in new tab": "Avaa uudessa välilehdessä",
     "%s similar people already exist. Do you want to add this person anyway?": "Samankaltaisia henkilöitä on jo olemassa (%s). Lisätäänkö henkilö silti?",
     "Add anyway": "Lisää silti",
-    "One similar person already exists": "Yksi samankaltainen henkilö on jo olemassa"
+    "One similar person already exists": "Yksi samankaltainen henkilö on jo olemassa",
+    "A citation with this page already exists for the source": "Lähteellä on jo lainaus tälle sivulle",
+    "Use this citation": "Käytä tätä lainausta"
 }
