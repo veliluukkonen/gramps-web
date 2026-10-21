@@ -807,7 +807,11 @@ export class GrampsjsViewObject extends GrampsjsView {
 
   async _postObject(obj, objType) {
     const url = `/api/${objectTypeToEndpoint[objType]}/`
-    return this.appState.apiPost(url, obj)
+    const data = await this.appState.apiPost(url, obj)
+    if ('error' in data) {
+      fireEvent(this, 'grampsjs:error', {message: data.error})
+    }
+    return data
   }
 
   _updateObject(obj, objType, updateFunc, editorDraftPrefix) {
@@ -817,8 +821,12 @@ export class GrampsjsViewObject extends GrampsjsView {
     objNew = {_class: capitalize(objType), ...objNew}
     const url = `/api/${objectTypeToEndpoint[objType]}/${obj.handle}`
 
-    this.appState.apiPut(url, updateFunc(objNew)).then(() => {
+    this.appState.apiPut(url, updateFunc(objNew)).then(data => {
       this._updateData(false)
+      if ('error' in data) {
+        fireEvent(this, 'grampsjs:error', {message: data.error})
+        return
+      }
       // Clear editor drafts after successful save (if prefix provided)
       if (editorDraftPrefix) {
         clearDraftsWithPrefix(editorDraftPrefix)
