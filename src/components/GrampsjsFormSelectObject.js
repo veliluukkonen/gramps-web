@@ -216,8 +216,14 @@ class GrampsjsFormSelectObject extends GrampsjsAppStateMixin(LitElement) {
     }&profile=all&page=1&pagesize=20`
     if (value) {
       url = `${url}&query=${encodeURIComponent(`${value}*`)}`
-    } else {
+    } else if (this.objectType !== 'source') {
       url = `${url}&sort=-change&query=${encodeURIComponent('*')}`
+    } else {
+      url = `${url}&query=${encodeURIComponent('*')}`
+    }
+    // sources are easier to find in alphabetical order
+    if (this.objectType === 'source') {
+      url = `${url}&sort=title`
     }
     if (this.objectType) {
       url = `${url}&type=${this.objectType}`

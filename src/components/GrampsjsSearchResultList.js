@@ -51,7 +51,10 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
         }
 
         mwc-list.wrap mwc-list-item span {
-          display: block;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
           white-space: normal;
           overflow-wrap: anywhere;
           line-height: 1.4;
