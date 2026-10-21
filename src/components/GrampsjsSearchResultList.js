@@ -1,5 +1,6 @@
 import {LitElement, css, html} from 'lit'
 import {classMap} from 'lit/directives/class-map.js'
+import {ifDefined} from 'lit/directives/if-defined.js'
 
 import '@material/mwc-icon'
 import '@material/mwc-icon-button'
@@ -120,6 +121,7 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
               ?noninteractive="${!this.selectable && !this.linked}"
               twoline
               graphic="avatar"
+              title="${ifDefined(this.wrap && desc ? desc : undefined)}"
               @click="${() => this._handleClick(obj)}"
               @keydown="${this._handleKeyDown}"
               ?hasMeta=${this.metaIcon !== ''}
