@@ -41,6 +41,20 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
           line-height: 40px;
           border-radius: 50%;
         }
+
+        mwc-list.wrap mwc-list-item {
+          height: auto;
+          min-height: 72px;
+          padding-top: 8px;
+          padding-bottom: 8px;
+        }
+
+        mwc-list.wrap mwc-list-item span {
+          display: block;
+          white-space: normal;
+          overflow-wrap: anywhere;
+          line-height: 1.4;
+        }
       `,
     ]
   }
@@ -58,6 +72,7 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
       loading: {type: Boolean},
       numberLoading: {type: Number},
       large: {type: Boolean},
+      wrap: {type: Boolean},
     }
   }
 
@@ -74,6 +89,7 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
     this.loading = false
     this.numberLoading = 2
     this.large = false
+    this.wrap = false
   }
 
   render() {
@@ -84,7 +100,7 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
       <mwc-list
         id="search-results"
         ?activatable="${this.activatable}"
-        class="${classMap({large: this.large})}"
+        class="${classMap({large: this.large, wrap: this.wrap})}"
       >
         ${this.data.length === 0 && this.textEmpty
           ? html`
