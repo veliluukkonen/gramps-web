@@ -15,6 +15,12 @@ export class GrampsjsFormNewNote extends GrampsjsNewNoteMixin(
           --md-dialog-container-min-inline-size: min(1200px, 95vw);
           max-block-size: 95vh;
         }
+
+        grampsjs-editor {
+          --grampsjs-editor-min-height: calc(
+            3 * var(--grampsjs-note-line-height, 1.5em)
+          );
+        }
       `,
     ]
   }

@@ -135,6 +135,7 @@ class GrampsjsEditor extends GrampsjsAppStateMixin(LitElement) {
           border: 1px solid var(--mdc-theme-secondary);
           border-radius: 8px;
           padding: 20px 25px;
+          min-height: var(--grampsjs-editor-min-height, auto);
         }
 
         mwc-icon-button {
