@@ -113,6 +113,7 @@ class GrampsjsFormSelectObject extends GrampsjsAppStateMixin(LitElement) {
           <grampsjs-search-result-list
             selectable
             wrap
+            ?compact="${this.objectType === 'source'}"
             .data="${this.data}"
             .appState="${this.appState}"
             @search-result:clicked="${this._handleSelected}"
@@ -211,9 +212,11 @@ class GrampsjsFormSelectObject extends GrampsjsAppStateMixin(LitElement) {
             `type:${this.objectType || '*'}`
           )}&profile=all&page=1&pagesize=20`
     }
+    // sources are picked from an alphabetical list, so fetch all of them
+    const pagesize = this.objectType === 'source' ? 1000 : 20
     let url = `/api/search/?locale=${
       this.appState.i18n.lang || 'en'
-    }&profile=all&page=1&pagesize=20`
+    }&profile=all&page=1&pagesize=${pagesize}`
     if (value) {
       url = `${url}&query=${encodeURIComponent(`${value}*`)}`
     } else if (this.objectType !== 'source') {

@@ -50,6 +50,31 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
           padding-bottom: 8px;
         }
 
+        mwc-list.compact mwc-list-item {
+          height: auto;
+          min-height: 32px;
+          padding-top: 4px;
+          padding-bottom: 4px;
+          font-size: 14px;
+        }
+
+        mwc-list.compact mwc-list-item span.compact-text {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          white-space: normal;
+          overflow-wrap: anywhere;
+          line-height: 1.3;
+        }
+
+        mwc-list.compact .compact-id {
+          color: var(--grampsjs-body-font-color-50);
+          font-size: 12px;
+          margin-left: 0.5em;
+          white-space: nowrap;
+        }
+
         mwc-list.wrap mwc-list-item span {
           display: -webkit-box;
           -webkit-box-orient: vertical;
@@ -77,6 +102,7 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
       numberLoading: {type: Number},
       large: {type: Boolean},
       wrap: {type: Boolean},
+      compact: {type: Boolean},
     }
   }
 
@@ -94,6 +120,7 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
     this.numberLoading = 2
     this.large = false
     this.wrap = false
+    this.compact = false
   }
 
   render() {
@@ -104,7 +131,11 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
       <mwc-list
         id="search-results"
         ?activatable="${this.activatable}"
-        class="${classMap({large: this.large, wrap: this.wrap})}"
+        class="${classMap({
+          large: this.large,
+          wrap: this.wrap && !this.compact,
+          compact: this.compact,
+        })}"
       >
         ${this.data.length === 0 && this.textEmpty
           ? html`
@@ -119,6 +150,9 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
             obj.object,
             this.appState.i18n.strings
           )
+          if (this.compact) {
+            return this._renderCompactItem(obj, desc)
+          }
           return html`
             <mwc-list-item
               ?noninteractive="${!this.selectable && !this.linked}"
@@ -155,6 +189,24 @@ export class GrampsjsSearchResultList extends GrampsjsAppStateMixin(
           `
         }, this)}
       </mwc-list>
+    `
+  }
+
+  // one dense line per object (used in pickers with many objects)
+  _renderCompactItem(obj, desc) {
+    return html`
+      <mwc-list-item
+        ?noninteractive="${!this.selectable && !this.linked}"
+        title="${ifDefined(desc || undefined)}"
+        @click="${() => this._handleClick(obj)}"
+        @keydown="${this._handleKeyDown}"
+      >
+        <span class="compact-text"
+          >${desc || this._renderSecondary(obj)}<span class="compact-id"
+            >${obj.object?.gramps_id || ''}</span
+          ></span
+        >
+      </mwc-list-item>
     `
   }
 
