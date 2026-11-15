@@ -68,13 +68,26 @@ export class GrampsjsViewObjectsDetail extends GrampsjsView {
     super.update(changed)
     if (this.active && changed.has('grampsIds')) {
       // grampsIds is an array, so we need to check if its *contents* have changed as well
+      const old = changed.get('grampsIds')
       if (
-        changed.get('grampsIds') === undefined ||
-        !arrayEqual(this.grampsIds, changed.get('grampsIds'))
+        old === undefined ||
+        old.length !== this.grampsIds.length ||
+        !arrayEqual(this.grampsIds, old)
       ) {
         this._updateData()
+      } else if (this.grampsIds.some((id, i) => id !== old[i])) {
+        // same objects in a new order (reordered list): just re-sort
+        this._data = this._sortData([...this._data])
       }
     }
+  }
+
+  _sortData(data) {
+    return data.sort(
+      (a, b) =>
+        this.grampsIds.indexOf(a.gramps_id) -
+        this.grampsIds.indexOf(b.gramps_id)
+    )
   }
 
   _updateData() {
@@ -90,11 +103,7 @@ export class GrampsjsViewObjectsDetail extends GrampsjsView {
         this.loading = false
         if ('data' in data) {
           this.error = false
-          this._data = data.data.sort(
-            (a, b) =>
-              this.grampsIds.indexOf(a.gramps_id) -
-              this.grampsIds.indexOf(b.gramps_id)
-          )
+          this._data = this._sortData(data.data)
         } else if ('error' in data) {
           this.error = true
           this._errorMessage = data.error

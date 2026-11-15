@@ -13,6 +13,7 @@ export class GrampsjsSourceCitations extends GrampsjsEditableList {
   constructor() {
     super()
     this.objType = 'Citation'
+    this.hasReorder = true
   }
 
   row(obj, i) {
@@ -112,6 +113,22 @@ export class GrampsjsSourceCitations extends GrampsjsEditableList {
     })
     e.preventDefault()
     e.stopPropagation()
+  }
+
+  _handleUp() {
+    this._move('upCitation')
+  }
+
+  _handleDown() {
+    this._move('downCitation')
+  }
+
+  _move(action) {
+    const handle = this.data?.[this._selectedIndex]?.handle
+    if (handle) {
+      fireEvent(this, 'edit:action', {action, handle})
+      this.renderRoot.querySelector('mwc-list')?.select(-1)
+    }
   }
 
   _handleCitCancel() {
