@@ -8,7 +8,8 @@ import '../components/GrampsjsIcon.js'
 
 import {GrampsjsView} from './GrampsjsView.js'
 
-import {fireEvent, makeHandle, objectTypeToEndpoint} from '../util.js'
+import {fireEvent, objectTypeToEndpoint} from '../util.js'
+import {postCitationWithNote} from '../citationApi.js'
 import {clearDraftsWithPrefix} from '../api.js'
 
 const editTitle = {
@@ -802,27 +803,12 @@ export class GrampsjsViewObject extends GrampsjsView {
 
   // create a citation, optionally with a new note (_note: StyledText)
   async _postCitationWithNote(data) {
-    const {_note: noteText, ...citation} = data
-    if (noteText) {
-      const noteHandle = makeHandle()
-      const noteData = await this._postObject(
-        {_class: 'Note', handle: noteHandle, type: 'Citation', text: noteText},
-        'note'
-      )
-      if (!('data' in noteData)) {
-        return
-      }
-      citation.note_list = [...(citation.note_list || []), noteHandle]
+    const res = await postCitationWithNote(this.appState, data)
+    if ('error' in res) {
+      fireEvent(this, 'grampsjs:error', {message: res.error})
+      return
     }
-    const citData = await this._postObject(citation, 'citation')
-    if ('data' in citData) {
-      this.addHandle(
-        citation.handle,
-        this._data,
-        this._className,
-        'citation_list'
-      )
-    }
+    this.addHandle(res.handle, this._data, this._className, 'citation_list')
   }
 
   async _postObject(obj, objType) {

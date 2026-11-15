@@ -9,6 +9,7 @@ import '@material/mwc-circular-progress'
 
 import {GrampsjsView} from './GrampsjsView.js'
 import {clearDraftsWithPrefix} from '../api.js'
+import '../components/GrampsjsFormSelectCitations.js'
 
 export class GrampsjsViewNewObject extends GrampsjsView {
   static get styles() {
@@ -71,6 +72,7 @@ export class GrampsjsViewNewObject extends GrampsjsView {
           'grampsjs-form-object-list',
           'grampsjs-form-select-object',
           'grampsjs-form-select-object-list',
+          'grampsjs-form-select-citations',
           'grampsjs-form-select-date',
           'grampsjs-form-string',
           'grampsjs-form-upload',
@@ -156,12 +158,10 @@ export class GrampsjsViewNewObject extends GrampsjsView {
     return html`
       <h4 class="label">${this._('Citation')}</h4>
 
-      <grampsjs-form-select-object-list
-        multiple
+      <grampsjs-form-select-citations
         id="object-citation"
-        objectType="citation"
         .appState="${this.appState}"
-      ></grampsjs-form-select-object-list>
+      ></grampsjs-form-select-citations>
     `
   }
 

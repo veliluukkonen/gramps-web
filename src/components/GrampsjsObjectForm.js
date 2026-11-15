@@ -85,6 +85,7 @@ export class GrampsjsObjectForm extends GrampsjsAppStateMixin(LitElement) {
           'grampsjs-form-object-list',
           'grampsjs-form-select-object',
           'grampsjs-form-select-object-list',
+          'grampsjs-form-select-citations',
           'grampsjs-form-select-date',
           'grampsjs-form-string',
           'grampsjs-form-upload',

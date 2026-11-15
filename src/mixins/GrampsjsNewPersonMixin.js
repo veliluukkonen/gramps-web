@@ -7,6 +7,7 @@ import '../components/GrampsjsFormSelectDate.js'
 import '../components/GrampsjsFormName.js'
 import '../components/GrampsjsFormPrivate.js'
 import '../components/GrampsjsSimilarPeople.js'
+import '../components/GrampsjsFormSelectCitations.js'
 
 const dataDefault = {_class: 'Person', gender: 2, citation_list: []}
 
@@ -131,12 +132,10 @@ export const GrampsjsNewPersonMixin = superClass =>
       return html`
         <h4 class="label">${this._('Citation')}</h4>
 
-        <grampsjs-form-select-object-list
-          multiple
+        <grampsjs-form-select-citations
           id="object-citation"
-          objectType="citation"
           .appState="${this.appState}"
-        ></grampsjs-form-select-object-list>
+        ></grampsjs-form-select-citations>
       `
     }
 

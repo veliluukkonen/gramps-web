@@ -3,6 +3,7 @@ import {html} from 'lit'
 import './GrampsjsFormSelectType.js'
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 import {GrampsjsNewEventMixin} from '../mixins/GrampsjsNewEventMixin.js'
+import './GrampsjsFormSelectCitations.js'
 
 export class GrampsjsFormNewEvent extends GrampsjsNewEventMixin(
   GrampsjsObjectForm
@@ -23,12 +24,10 @@ export class GrampsjsFormNewEvent extends GrampsjsNewEventMixin(
     return html`
       <h4 class="label">${this._('Citation')}</h4>
 
-      <grampsjs-form-select-object-list
-        multiple
+      <grampsjs-form-select-citations
         id="object-citation"
-        objectType="citation"
         .appState="${this.appState}"
-      ></grampsjs-form-select-object-list>
+      ></grampsjs-form-select-citations>
     `
   }
 
