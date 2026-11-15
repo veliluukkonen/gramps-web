@@ -42,19 +42,24 @@ export class GrampsjsEvents extends GrampsjsEditableList {
       <mwc-list-item
         twoline
         graphic="avatar"
-        ?hasMeta="${obj.citation_list?.length > 0}"
+        ?hasMeta="${obj.citation_list?.length > 0 || this._hasRowActions}"
         @click="${() => this._handleClick(obj.gramps_id)}"
       >
         ${this._getPrimaryText(objProfile)}
         <span slot="secondary">${this._getSecondaryText(objProfile)}</span>
         ${renderIcon({object: obj, object_type: 'event'})}
-        ${obj.citation_list?.length > 0
-          ? html`<span slot="meta"
-              ><grampsjs-citation-link
-                .appState="${this.appState}"
-                .citations="${obj.citation_list}"
-              ></grampsjs-citation-link
-            ></span>`
+        ${obj.citation_list?.length > 0 || this._hasRowActions
+          ? html`<span slot="meta" class="row-meta"
+              >${obj.citation_list?.length > 0
+                ? html`<grampsjs-citation-link
+                    .appState="${this.appState}"
+                    .citations="${obj.citation_list}"
+                  ></grampsjs-citation-link>`
+                : ''}${this._renderRowActions(
+                this._getItemPath(obj.gramps_id),
+                j
+              )}</span
+            >`
           : ''}
       </mwc-list-item>
     `

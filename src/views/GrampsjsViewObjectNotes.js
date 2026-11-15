@@ -12,6 +12,7 @@ import '../components/GrampsjsFormNewNote.js'
 import '../components/GrampsjsIcon.js'
 import '../components/GrampsjsTooltip.js'
 import {fireEvent, makeHandle} from '../util.js'
+import {confirmUnlink, openObject} from '../components/GrampsjsInlineEdit.js'
 
 const BASE_DIR = ''
 
@@ -96,6 +97,11 @@ export class GrampsjsViewObjectNotes extends GrampsjsViewObjectsDetail {
     return html`${skeletonNotes}`
   }
 
+  // notes can be added and removed in view mode too (with edit permission)
+  get showEditControls() {
+    return this.edit || Boolean(this.appState?.permissions?.canEdit)
+  }
+
   renderEdit() {
     return html`
       <div>
@@ -111,7 +117,10 @@ export class GrampsjsViewObjectNotes extends GrampsjsViewObjectsDetail {
             color="var(--mdc-theme-secondary)"
           ></grampsjs-icon>
         </md-icon-button>
-        ${this.dialogContent}
+        ${
+          // with notes, renderContent of the base class renders the dialog
+          this._data.length === 0 ? this.dialogContent : ''
+        }
       </div>
     `
   }
@@ -151,23 +160,26 @@ export class GrampsjsViewObjectNotes extends GrampsjsViewObjectsDetail {
           grampsId="${obj.gramps_id}"
           content="${obj?.formatted?.html || obj?.text?.string}"
         >
-          ${this.edit
-            ? ''
-            : html`<div class="note-meta">
-                <md-text-button
-                  outlined
-                  @click="${() => this._handleButtonClick(obj.gramps_id)}"
-                >
-                  ${this._('Details')}
-                </md-text-button>
-              </div>`}
+          <div class="note-meta">
+            <md-text-button
+              outlined
+              @click="${() => this._handleButtonClick(obj.gramps_id)}"
+            >
+              ${this._('Details')}
+            </md-text-button>
+          </div>
         </grampsjs-note-content>
       </div>
       <div class="note-edit-meta">
-        ${this.edit
+        ${this.showEditControls
           ? html`
               <md-icon-button
-                @click="${() => this._handleNoteRefDel(obj.handle)}"
+                @click="${() =>
+                  this.edit
+                    ? this._handleNoteRefDel(obj.handle)
+                    : confirmUnlink(this, () =>
+                        this._handleNoteRefDel(obj.handle)
+                      )}"
                 id="del-note-${obj.handle}"
               >
                 <grampsjs-icon
@@ -214,15 +226,8 @@ export class GrampsjsViewObjectNotes extends GrampsjsViewObjectsDetail {
   }
 
   _handleButtonClick(grampsId) {
-    this.dispatchEvent(
-      new CustomEvent('nav', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          path: `note/${grampsId}`,
-        },
-      })
-    )
+    // from edit mode the note opens in edit mode (see openObject)
+    openObject(this, `note/${grampsId}`)
   }
 }
 

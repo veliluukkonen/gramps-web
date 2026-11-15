@@ -22,6 +22,8 @@ export class GrampsjsEditableTable extends GrampsjsTableBase {
   static get properties() {
     return {
       edit: {type: Boolean},
+      // allow adding/removing references in view mode (with edit permission)
+      inlineEdit: {type: Boolean},
       objType: {type: String},
       dialogContent: {type: String},
       dialogTitle: {type: String},
@@ -32,6 +34,7 @@ export class GrampsjsEditableTable extends GrampsjsTableBase {
   constructor() {
     super()
     this.edit = false
+    this.inlineEdit = false
     this.objType = ''
     this.dialogContent = ''
     this.dialogTitle = ''

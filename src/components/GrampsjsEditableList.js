@@ -9,6 +9,11 @@ import '@material/mwc-list/mwc-list-item'
 
 import {sharedStyles} from '../SharedStyles.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
+import {
+  inlineEditActive,
+  renderOpenButton,
+  renderUnlinkButton,
+} from './GrampsjsInlineEdit.js'
 
 export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
   static get styles() {
@@ -63,6 +68,23 @@ export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
           );
         }
 
+        /* open / remove reference buttons in the meta slot of a row */
+        mwc-list-item[hasMeta] {
+          --mdc-list-item-meta-size: auto;
+        }
+
+        [slot='meta'] {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        [slot='meta'] mwc-icon-button {
+          --mdc-icon-button-size: 36px;
+          --mdc-icon-size: 20px;
+          color: var(--mdc-theme-secondary);
+        }
+
         mwc-icon.placeholder {
           width: 40px;
           height: 40px;
@@ -84,6 +106,8 @@ export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
       hasShare: {type: Boolean},
       hasEdit: {type: Boolean},
       hasReorder: {type: Boolean},
+      // allow adding/removing references in view mode (with edit permission)
+      inlineEdit: {type: Boolean},
       _selectedIndex: {type: Number},
     }
   }
@@ -99,15 +123,42 @@ export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
     this.hasShare = false
     this.hasEdit = false
     this.hasReorder = false
+    this.inlineEdit = false
     this._selectedIndex = -1
+  }
+
+  get _inlineActive() {
+    return inlineEditActive(this)
+  }
+
+  // whether rows show the open/unlink buttons (see _renderRowActions)
+  get _hasRowActions() {
+    return this.edit || this._inlineActive
+  }
+
+  // meta buttons of a row: "open" in edit mode, "remove reference" in
+  // inline (view) mode
+  _renderRowActions(path, index) {
+    if (this.edit && path) {
+      return renderOpenButton(this, path)
+    }
+    if (this._inlineActive) {
+      return renderUnlinkButton(this, () => {
+        this._selectedIndex = index
+        this._handleDelete(new Event('unlink'))
+        this._selectedIndex = -1
+      })
+    }
+    return ''
   }
 
   render() {
     return html`
-      ${Object.keys(this.data).length === 0 && !this.edit
+      ${Object.keys(this.data).length === 0 && !this.edit && !this._inlineActive
         ? ''
         : html`
             ${this.edit ? this._renderActionBtns() : ''}
+            ${this._inlineActive ? this._renderInlineBtns() : ''}
             <mwc-list
               ?activatable="${this.edit}"
               @action="${this._handleSelected}"
@@ -132,6 +183,30 @@ export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
 
   row(obj, i, arr) {
     return ''
+  }
+
+  // add/share buttons in view mode
+  _renderInlineBtns() {
+    return html`
+      ${this.hasShare
+        ? html`
+            <mwc-icon-button
+              class="edit"
+              icon="add_link"
+              @click="${this._handleShare}"
+            ></mwc-icon-button>
+          `
+        : ''}
+      ${this.hasAdd
+        ? html`
+            <mwc-icon-button
+              class="edit"
+              icon="add"
+              @click="${this._handleAdd}"
+            ></mwc-icon-button>
+          `
+        : ''}
+    `
   }
 
   _renderActionBtns() {

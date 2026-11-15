@@ -15,17 +15,20 @@ export class GrampsjsSourceCitations extends GrampsjsEditableList {
     this.objType = 'Citation'
   }
 
-  row(obj) {
+  row(obj, i) {
     return html`
       <mwc-list-item
         twoline
         graphic="avatar"
-        ?hasMeta="${this.edit}"
+        ?hasMeta="${this._hasRowActions}"
         @click="${() => this._handleClick(obj.gramps_id)}"
       >
         ${obj?.profile?.source?.title || this._('Source')}
         <span slot="secondary"> ${obj.page || obj.gramps_id} </span>
         ${renderIcon({object: obj, object_type: 'citation'})}
+        <span slot="meta"
+          >${this._renderRowActions(this._getItemPath(obj.gramps_id), i)}</span
+        >
       </mwc-list-item>
     `
   }

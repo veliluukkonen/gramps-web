@@ -35,12 +35,18 @@ export class GrampsjsViewSourceCitations extends GrampsjsViewObjectsDetail {
     return html`
       <grampsjs-source-citations
         hasShare
+        inlineEdit
         .data="${this._data}"
         ?edit="${this.edit}"
         .appState="${this.appState}"
       >
       </grampsjs-source-citations>
     `
+  }
+
+  // references can be added in view mode too (with edit permission)
+  get showEditControls() {
+    return this.edit || Boolean(this.appState?.permissions?.canEdit)
   }
 
   renderEdit() {

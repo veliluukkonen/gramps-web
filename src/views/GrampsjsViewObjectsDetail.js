@@ -41,16 +41,21 @@ export class GrampsjsViewObjectsDetail extends GrampsjsView {
       return this.renderLoading()
     }
     if (this._data.length === 0) {
-      return html`${this.edit ? this.renderEdit() : ''}`
+      return html`${this.showEditControls ? this.renderEdit() : ''}`
     }
     return html`
-      ${this.edit ? this.renderEdit() : ''} ${this.renderElements()}
+      ${this.showEditControls ? this.renderEdit() : ''} ${this.renderElements()}
       ${this.dialogContent}
     `
   }
 
   renderLoading() {
     return ''
+  }
+
+  // whether the add/link controls (renderEdit) are shown
+  get showEditControls() {
+    return this.edit
   }
 
   renderEdit() {}

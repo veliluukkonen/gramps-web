@@ -265,5 +265,9 @@
     "A citation with this page already exists for the source": "Lähteellä on jo lainaus tälle sivulle",
     "Use this citation": "Käytä tätä lainausta",
     "Create a new source": "Luo uusi lähde",
-    "Create source": "Luo lähde"
+    "Create source": "Luo lähde",
+    "Open object": "Avaa",
+    "Remove reference": "Poista viittaus",
+    "Remove reference?": "Poistetaanko viittaus?",
+    "Only the reference is removed, not the object itself.": "Vain viittaus poistetaan, itse kohde säilyy."
 }

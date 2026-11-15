@@ -8,6 +8,11 @@ import {fireEvent} from '../util.js'
 import {GrampsjsEditableTable} from './GrampsjsEditableTable.js'
 import './GrampsjsFormChildRef.js'
 import './GrampsjsFormNewChild.js'
+import {
+  inlineEditActive,
+  renderOpenButton,
+  renderUnlinkButton,
+} from './GrampsjsInlineEdit.js'
 
 function genderIcon(gender) {
   if (gender === 'M') {
@@ -49,7 +54,24 @@ export class GrampsjsChildren extends GrampsjsEditableTable {
         <td>${this.profile[i]?.death?.age || ''}</td>
         <td>
           ${this.edit
-            ? this._renderActionBtns(obj.ref, i === 0, i === arr.length - 1)
+            ? html`${this.profile[i]?.gramps_id
+                ? renderOpenButton(
+                    this,
+                    this._getItemPath(this.profile[i].gramps_id)
+                  )
+                : ''}${this._renderActionBtns(
+                obj.ref,
+                i === 0,
+                i === arr.length - 1
+              )}`
+            : ''}
+          ${inlineEditActive(this)
+            ? renderUnlinkButton(this, () =>
+                fireEvent(this, 'edit:action', {
+                  action: `del${this.objType}`,
+                  handle: obj.ref,
+                })
+              )
             : ''}
         </td>
       </tr>
@@ -57,7 +79,7 @@ export class GrampsjsChildren extends GrampsjsEditableTable {
   }
 
   renderAfterTable() {
-    return this.edit
+    return this.edit || inlineEditActive(this)
       ? html`
           <mwc-icon-button
             class="edit"

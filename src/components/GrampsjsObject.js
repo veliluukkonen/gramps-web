@@ -698,6 +698,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           hasShare
           hasAdd
           hasEdit
+          inlineEdit
           defaultRole=${this._objectsName === 'Families' ? 'Family' : 'Primary'}
           .appState="${this.appState}"
           .data=${this.data?.extended?.events}
@@ -733,6 +734,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
       }
       case 'children':
         return html`<grampsjs-children
+          inlineEdit
           .appState="${this.appState}"
           .data=${this.data?.child_ref_list}
           .profile=${this.data?.profile?.children}
@@ -798,6 +800,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
       case 'associations':
         return html`<grampsjs-associations
           hasEdit
+          inlineEdit
           .appState="${this.appState}"
           .data=${this.data?.person_ref_list || []}
           .extended=${this.data?.extended?.people || []}

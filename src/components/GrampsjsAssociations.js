@@ -20,11 +20,19 @@ export class GrampsjsAssociations extends GrampsjsEditableList {
       <mwc-list-item
         twoline
         graphic="avatar"
-        ?hasMeta="${this.edit}"
+        ?hasMeta="${this._hasRowActions}"
         @click="${() => this._handleClick(this.extended[i])}"
         >${personDisplayName(this.extended[i])}
         <span slot="secondary">${this._(obj.rel)}</span>
         <mwc-icon slot="graphic">group</mwc-icon>
+        <span slot="meta"
+          >${this._renderRowActions(
+            this.extended[i]?.gramps_id
+              ? this._getItemPath(this.extended[i].gramps_id)
+              : '',
+            i
+          )}</span
+        >
       </mwc-list-item>
     `
   }

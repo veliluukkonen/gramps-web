@@ -87,6 +87,9 @@ export class GrampsjsViewObject extends GrampsjsView {
     this._boundDisableEditMode = this._disableEditMode.bind(this)
     this._boundDeleteSelf = this._deleteSelf.bind(this)
     this._boundToggleEditMode = this._toggleEditMode.bind(this)
+    this._boundRestoreEditMode = this._restoreEditMode.bind(this)
+    this._boundDbChanged = this._handleDbChanged.bind(this)
+    this._stale = false
   }
 
   get canEdit() {
@@ -135,6 +138,20 @@ export class GrampsjsViewObject extends GrampsjsView {
     this.edit = false
   }
 
+  // edit mode restored by the app after "open" from edit mode / back
+  _restoreEditMode() {
+    if (this.active && this.canEdit && !this.edit) {
+      this._activateEditMode()
+    }
+  }
+
+  // data changed elsewhere (e.g. in an opened event): reload when shown again
+  _handleDbChanged() {
+    if (!this.active) {
+      this._stale = true
+    }
+  }
+
   _toggleEditMode() {
     if (!this.active || !this.canEdit) {
       return
@@ -155,6 +172,8 @@ export class GrampsjsViewObject extends GrampsjsView {
     window.addEventListener('edit-mode:off', this._boundDisableEditMode)
     window.addEventListener('edit-mode:delete', this._boundDeleteSelf)
     window.addEventListener('edit-mode:toggle', this._boundToggleEditMode)
+    window.addEventListener('edit-mode:restore', this._boundRestoreEditMode)
+    window.addEventListener('db:changed', this._boundDbChanged)
     this.addEventListener('edit:action', this.handleEditAction.bind(this))
   }
 
@@ -163,6 +182,8 @@ export class GrampsjsViewObject extends GrampsjsView {
     window.removeEventListener('edit-mode:off', this._boundDisableEditMode)
     window.removeEventListener('edit-mode:delete', this._boundDeleteSelf)
     window.removeEventListener('edit-mode:toggle', this._boundToggleEditMode)
+    window.removeEventListener('edit-mode:restore', this._boundRestoreEditMode)
+    window.removeEventListener('db:changed', this._boundDbChanged)
     super.disconnectedCallback()
   }
 
@@ -179,6 +200,12 @@ export class GrampsjsViewObject extends GrampsjsView {
       !this.loading
     ) {
       this._updateData()
+    }
+    if (changed.has('active') && this.active && this._stale) {
+      this._stale = false
+      if (this._data.gramps_id === this.grampsId && !this.loading) {
+        this._updateData(false)
+      }
     }
     if (
       changed.has('appState') &&

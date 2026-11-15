@@ -566,9 +566,11 @@ export class GrampsJs extends LitElement {
   }
 
   firstUpdated() {
-    installRouter(location =>
+    installRouter(location => {
+      // back/forward to a page that was left in edit mode via "open"
+      this._restoreEditMode = window.history.state?.edit === true
       this._loadPage(decodeURIComponent(location.pathname))
-    )
+    })
     installMediaQueryWatcher('(max-width: 991px)', matches => {
       if (matches && this.appState.screenSize !== 'small') {
         this._updateAppState({screenSize: 'small'})
@@ -733,6 +735,10 @@ export class GrampsJs extends LitElement {
 
   _loadPage(path) {
     this._disableEditMode()
+    if (this._restoreEditMode) {
+      this._restoreEditMode = false
+      this._enableEditModeAfterLoad()
+    }
 
     if (path.includes('/oidc/callback')) {
       handleOIDCCallback(msg => this._showError(msg))
@@ -780,14 +786,26 @@ export class GrampsJs extends LitElement {
   _handleTab(page) {
     if (page !== this.appState.path.page) {
       const href = `${BASE_DIR}/${page}`
+      this._markHistoryEdit(false)
       this._loadPage(href)
       window.history.pushState({}, '', href)
-      this._disableEditMode()
     }
   }
 
+  // switch the newly active view to edit mode once it is rendered
+  async _enableEditModeAfterLoad() {
+    await this.updateComplete
+    setTimeout(() => fireEvent(this, 'edit-mode:restore'), 0)
+  }
+
+  // remember in the history entry whether the page is left in edit mode
+  // eslint-disable-next-line class-methods-use-this
+  _markHistoryEdit(edit) {
+    window.history.replaceState({...(window.history.state || {}), edit}, '')
+  }
+
   _handleNav(e) {
-    const {path} = e.detail
+    const {path, keepEdit} = e.detail
     const page = path.split('/')[0]
     const pageId = path.split('/')[1]
     const pageId2 = path.split('/')[2]
@@ -798,9 +816,12 @@ export class GrampsJs extends LitElement {
       pageId2 !== appPath.pageId2
     ) {
       const href = `${BASE_DIR}/${path}`
+      // "open" from edit mode: the target opens in edit mode and the
+      // current page is in edit mode again when navigating back
+      this._markHistoryEdit(Boolean(keepEdit))
+      this._restoreEditMode = Boolean(keepEdit)
       this._loadPage(href)
       window.history.pushState({}, '', href)
-      this._disableEditMode()
     }
   }
 
