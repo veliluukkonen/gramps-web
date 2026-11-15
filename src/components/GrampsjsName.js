@@ -30,6 +30,9 @@ export class GrampsjsName extends GrampsjsAppStateMixin(LitElement) {
   }
 
   render() {
+    if (!this.data) {
+      return ''
+    }
     return html`
       <h4>${this._(this.data.type)}</h4>
       <dl>
@@ -73,7 +76,7 @@ export class GrampsjsName extends GrampsjsAppStateMixin(LitElement) {
               </div>
             `
           : ''}
-        ${this.data.surname_list.length > 0
+        ${this.data.surname_list?.length > 0
           ? html`
               ${this.data.surname_list.map(
                 surname => html`

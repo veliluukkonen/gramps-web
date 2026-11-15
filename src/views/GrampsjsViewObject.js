@@ -698,7 +698,11 @@ export class GrampsjsViewObject extends GrampsjsView {
   delName(data, obj) {
     const {index} = data
     return this._updateObject(obj, 'person', _obj => {
-      if (index === 0) {
+      if (index === 0 && _obj.alternate_names?.length > 0) {
+        // promote the first alternate name instead of leaving an empty name
+        ;[_obj.primary_name] = _obj.alternate_names
+        _obj.alternate_names = _obj.alternate_names.slice(1)
+      } else if (index === 0) {
         // keep the entry but delete everything except the name type
         Object.keys(_obj.primary_name)
           .filter(key => key !== 'type')
