@@ -143,6 +143,7 @@ class GrampsjsFormObjectList extends GrampsjsAppStateMixin(LitElement) {
         ...this.objects.slice(i + 2),
       ]
     }
+    this._handleChange()
   }
 
   _handleChange() {
