@@ -12,6 +12,7 @@ import './GrampsjsFormSelectType.js'
 import './GrampsjsFormSelectObjectList.js'
 import './GrampsjsFormString.js'
 import './GrampsjsExistingCitations.js'
+import './GrampsjsEditor.js'
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 import {fireEvent} from '../util.js'
 
@@ -79,6 +80,16 @@ class GrampsjsFormNewCitation extends GrampsjsObjectForm {
       <h4 class="label">${this._('Page')}</h4>
       <p>
         <grampsjs-form-string fullwidth id="page"></grampsjs-form-string>
+      </p>
+
+      <h4 class="label">${this._('Note')}</h4>
+      <p>
+        <grampsjs-editor
+          id="citation-note-editor"
+          @formdata:changed="${this._handleNoteEditor}"
+          @keydown="${e => e.stopImmediatePropagation()}"
+          .appState="${this.appState}"
+        ></grampsjs-editor>
       </p>
 
       <grampsjs-existing-citations
@@ -231,6 +242,16 @@ class GrampsjsFormNewCitation extends GrampsjsObjectForm {
       ?.setObjects([
         {object_type: 'source', handle: source.handle, object: source},
       ])
+  }
+
+  _handleNoteEditor(e) {
+    // the note is created together with the citation (see newCitation)
+    e.stopPropagation()
+    const text = e.detail.data
+    this.data = {
+      ...this.data,
+      _note: text?.string?.trim() ? text : undefined,
+    }
   }
 
   handleConfidence(e) {

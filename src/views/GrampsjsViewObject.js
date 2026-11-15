@@ -8,7 +8,7 @@ import '../components/GrampsjsIcon.js'
 
 import {GrampsjsView} from './GrampsjsView.js'
 
-import {fireEvent, objectTypeToEndpoint} from '../util.js'
+import {fireEvent, makeHandle, objectTypeToEndpoint} from '../util.js'
 import {clearDraftsWithPrefix} from '../api.js'
 
 const editTitle = {
@@ -307,16 +307,7 @@ export class GrampsjsViewObject extends GrampsjsView {
         'note_list'
       )
     } else if (e.detail.action === 'newCitation') {
-      this._postObject(e.detail.data, 'citation').then(data => {
-        if ('data' in data) {
-          this.addHandle(
-            e.detail.data.handle,
-            this._data,
-            this._className,
-            'citation_list'
-          )
-        }
-      })
+      this._postCitationWithNote(e.detail.data)
     } else if (e.detail.action === 'newNote') {
       this._postObject(e.detail.data, 'note').then(data => {
         if ('data' in data) {
@@ -807,6 +798,31 @@ export class GrampsjsViewObject extends GrampsjsView {
       }
       return _obj
     })
+  }
+
+  // create a citation, optionally with a new note (_note: StyledText)
+  async _postCitationWithNote(data) {
+    const {_note: noteText, ...citation} = data
+    if (noteText) {
+      const noteHandle = makeHandle()
+      const noteData = await this._postObject(
+        {_class: 'Note', handle: noteHandle, type: 'Citation', text: noteText},
+        'note'
+      )
+      if (!('data' in noteData)) {
+        return
+      }
+      citation.note_list = [...(citation.note_list || []), noteHandle]
+    }
+    const citData = await this._postObject(citation, 'citation')
+    if ('data' in citData) {
+      this.addHandle(
+        citation.handle,
+        this._data,
+        this._className,
+        'citation_list'
+      )
+    }
   }
 
   async _postObject(obj, objType) {

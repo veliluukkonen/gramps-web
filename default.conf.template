@@ -13,6 +13,20 @@ server {
       try_files $uri $uri/ $uri.html /index.html;
   }
 
+  # always revalidate files that change with every release
+  # (otherwise browsers keep e.g. stale translations)
+  location /lang/ {
+      add_header Cache-Control "no-cache";
+  }
+
+  location = /index.html {
+      add_header Cache-Control "no-cache";
+  }
+
+  location = /sw.js {
+      add_header Cache-Control "no-cache";
+  }
+
   location /api {
       add_header       "Access-Control-Allow-Origin" $http_origin;
       proxy_redirect   off;
