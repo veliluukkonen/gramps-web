@@ -3,6 +3,7 @@ Element for selecting a Gramps type
 */
 
 import {html, css, LitElement} from 'lit'
+import {live} from 'lit/directives/live.js'
 import '@material/mwc-textfield'
 
 import {sharedStyles} from '../SharedStyles.js'
@@ -47,7 +48,7 @@ class GrampsjsFormString extends GrampsjsAppStateMixin(LitElement) {
       <mwc-textfield
         @input="${this.handleChange}"
         label="${this.label}"
-        value="${this.value}"
+        .value="${live(this.value ?? '')}"
         type="${this.type}"
         ?disabled="${this.disabled}"
         ?required="${this.required}"
@@ -57,12 +58,16 @@ class GrampsjsFormString extends GrampsjsAppStateMixin(LitElement) {
   }
 
   reset() {
+    this.value = ''
     this.shadowRoot.querySelector('mwc-textfield').value = ''
   }
 
   handleChange() {
     const el = this.shadowRoot.querySelector('mwc-textfield')
     if (el !== null) {
+      // keep the property in sync so that a later value from the parent
+      // (e.g. after reordering rows) is always shown
+      this.value = el.value
       fireEvent(this, 'formdata:changed', {data: el.value})
     }
   }

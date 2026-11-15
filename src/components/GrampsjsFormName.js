@@ -205,33 +205,29 @@ class GrampsjsFormName extends GrampsjsAppStateMixin(LitElement) {
     fireEvent(this, 'formdata:changed', {data: this.data})
   }
 
+  // add/delete/move must notify the form, otherwise a change consisting only
+  // of these actions is not saved (and the save button stays disabled)
+  _setSurnameList(surnameList) {
+    this.data = {...this.data, surname_list: surnameList}
+    this.handleChange()
+  }
+
   _handleAddSurname() {
-    this.data = {
-      ...this.data,
-      surname_list: [...(this.data.surname_list || [{}]), {}],
-    }
+    this._setSurnameList([...(this.data.surname_list || [{}]), {}])
   }
 
   _handleDeleteSurname(i) {
-    this.data.surname_list.splice(i, 1)
-    this.data = {
-      ...this.data,
-      surname_list: [...this.data.surname_list],
-    }
+    this._setSurnameList(
+      (this.data.surname_list || []).filter((_, j) => j !== i)
+    )
   }
 
   _handleUpSurname(i) {
-    this.data = {
-      ...this.data,
-      surname_list: [...this.moveItem(this.data.surname_list, i, i - 1)],
-    }
+    this._setSurnameList(this.moveItem(this.data.surname_list, i, i - 1))
   }
 
   _handleDownSurname(i) {
-    this.data = {
-      ...this.data,
-      surname_list: [...this.moveItem(this.data.surname_list, i, i + 1)],
-    }
+    this._setSurnameList(this.moveItem(this.data.surname_list, i, i + 1))
   }
 
   _handleFormData(e) {
@@ -258,11 +254,12 @@ class GrampsjsFormName extends GrampsjsAppStateMixin(LitElement) {
     this.handleChange()
   }
 
+  // returns a moved copy (the list may be shared with the saved object)
   moveItem = (array, from, to) => {
-    const item = array[from]
-    array.splice(from, 1)
-    array.splice(to, 0, item)
-    return array
+    const result = [...(array || [])]
+    const [item] = result.splice(from, 1)
+    result.splice(to, 0, item)
+    return result
   }
 }
 
