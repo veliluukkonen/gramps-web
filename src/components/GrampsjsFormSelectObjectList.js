@@ -110,6 +110,16 @@ class GrampsjsFormSelectObjectList extends GrampsjsAppStateMixin(LitElement) {
     selectObject.objects = e.detail.objects
   }
 
+  // select the given objects programmatically (e.g. a newly created one)
+  setObjects(objects) {
+    const objList = this.shadowRoot.querySelector('grampsjs-form-object-list')
+    const objSelect = this.shadowRoot.querySelector(
+      'grampsjs-form-select-object'
+    )
+    objList.objects = [...objects]
+    objSelect.objects = [...objects]
+  }
+
   reset() {
     this.shadowRoot
       .querySelectorAll(
