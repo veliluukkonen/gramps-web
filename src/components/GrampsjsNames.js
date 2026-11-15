@@ -82,7 +82,7 @@ export class GrampsjsNames extends GrampsjsEditableList {
       action: 'upName',
       handle: this._selectedIndex,
     })
-    this.renderRoot.querySelector('mwc-list').select(-1)
+    this._selectAfterMove(-1)
   }
 
   _handleDown() {
@@ -90,7 +90,7 @@ export class GrampsjsNames extends GrampsjsEditableList {
       action: 'downName',
       handle: this._selectedIndex,
     })
-    this.renderRoot.querySelector('mwc-list').select(-1)
+    this._selectAfterMove(1)
   }
 
   _handleEdit() {

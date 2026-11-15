@@ -116,18 +116,18 @@ export class GrampsjsSourceCitations extends GrampsjsEditableList {
   }
 
   _handleUp() {
-    this._move('upCitation')
+    this._move('upCitation', -1)
   }
 
   _handleDown() {
-    this._move('downCitation')
+    this._move('downCitation', 1)
   }
 
-  _move(action) {
+  _move(action, delta) {
     const handle = this.data?.[this._selectedIndex]?.handle
     if (handle) {
+      this._selectAfterMove(delta)
       fireEvent(this, 'edit:action', {action, handle})
-      this.renderRoot.querySelector('mwc-list')?.select(-1)
     }
   }
 

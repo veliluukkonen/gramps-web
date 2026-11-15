@@ -123,6 +123,9 @@ class GrampsjsFormObjectList extends GrampsjsAppStateMixin(LitElement) {
         ...this.objects.slice(i + 1),
       ]
     }
+    if (i > 0) {
+      this._reselect(i - 1)
+    }
     this._handleChange()
   }
 
@@ -143,7 +146,19 @@ class GrampsjsFormObjectList extends GrampsjsAppStateMixin(LitElement) {
         ...this.objects.slice(i + 2),
       ]
     }
+    if (i < L - 1) {
+      this._reselect(i + 1)
+    }
     this._handleChange()
+  }
+
+  // keep the moved object selected after the list has been re-rendered
+  async _reselect(index) {
+    this.selectedIndex = index
+    await this.updateComplete
+    const results = this.shadowRoot.querySelector('grampsjs-search-result-list')
+    await results?.updateComplete
+    results?.shadowRoot?.querySelector('mwc-list')?.select(index)
   }
 
   _handleChange() {

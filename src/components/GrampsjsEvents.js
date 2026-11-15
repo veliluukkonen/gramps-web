@@ -219,6 +219,7 @@ export class GrampsjsEvents extends GrampsjsEditableList {
   _handleUp() {
     const handle = this.data?.[this._selectedIndex]?.handle
     if (handle) {
+      this._selectAfterMove(-1)
       fireEvent(this, 'edit:action', {
         action: 'upEvent',
         handle: this.data[this._selectedIndex].handle,
@@ -229,11 +230,11 @@ export class GrampsjsEvents extends GrampsjsEditableList {
   _handleDown() {
     const handle = this.data?.[this._selectedIndex]?.handle
     if (handle) {
+      this._selectAfterMove(1)
       fireEvent(this, 'edit:action', {
         action: 'downEvent',
         handle: this.data[this._selectedIndex].handle,
       })
-      this.renderRoot.querySelector('mwc-list').select(-1)
     }
   }
 

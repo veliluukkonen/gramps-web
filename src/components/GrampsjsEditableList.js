@@ -270,7 +270,22 @@ export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
     if (changed.has('edit')) {
       this._selectedIndex = -1
       this.dialogContent = ''
+      this._reselectIndex = undefined
     }
+    if (changed.has('data') && this._reselectIndex !== undefined) {
+      // keep the moved row selected once the reordered data has arrived
+      const index = this._reselectIndex
+      this._reselectIndex = undefined
+      if (index >= 0 && index < this.data.length) {
+        this._selectedIndex = index
+        this.renderRoot.querySelector('mwc-list')?.select(index)
+      }
+    }
+  }
+
+  // call when an up/down move has been requested for the selected row
+  _selectAfterMove(delta) {
+    this._reselectIndex = this._selectedIndex + delta
   }
 
   _handleActionClick(e, action, handle) {
