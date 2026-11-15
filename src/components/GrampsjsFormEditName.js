@@ -6,6 +6,7 @@ import {html} from 'lit'
 
 import './GrampsjsFormName.js'
 import './GrampsjsFormSelectType.js'
+import './GrampsjsFormSelectCitations.js'
 
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 
@@ -50,6 +51,13 @@ class GrampsjsFormEditName extends GrampsjsObjectForm {
         .typesLocale="${this.typesLocale}"
       >
       </grampsjs-form-name>
+
+      <h4 class="label">${this._('Citations')}</h4>
+      <grampsjs-form-select-citations
+        id="object-citation"
+        .appState="${this.appState}"
+        .citationHandles="${this.data?.citation_list || []}"
+      ></grampsjs-form-select-citations>
     `
   }
 

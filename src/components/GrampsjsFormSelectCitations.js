@@ -24,12 +24,14 @@ class GrampsjsFormSelectCitations extends GrampsjsAppStateMixin(LitElement) {
   static get properties() {
     return {
       _dialogOpen: {type: Boolean},
+      citationHandles: {type: Array},
     }
   }
 
   constructor() {
     super()
     this._dialogOpen = false
+    this.citationHandles = []
   }
 
   render() {
@@ -39,6 +41,11 @@ class GrampsjsFormSelectCitations extends GrampsjsAppStateMixin(LitElement) {
         id="${this.id}"
         objectType="citation"
         .appState="${this.appState}"
+        .objectsInitial="${(this.citationHandles || []).map(handle => ({
+          object_type: 'citation',
+          object: {},
+          handle,
+        }))}"
       ></grampsjs-form-select-object-list>
       <p>
         <mwc-button

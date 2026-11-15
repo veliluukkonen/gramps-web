@@ -5,6 +5,7 @@ Form for adding a new event reference
 import {html} from 'lit'
 
 import './GrampsjsFormSelectObjectList.js'
+import './GrampsjsFormSelectCitations.js'
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 
 class GrampsjsFormMediaRef extends GrampsjsObjectForm {
@@ -19,6 +20,13 @@ class GrampsjsFormMediaRef extends GrampsjsObjectForm {
         label="${this._('Select')}"
         class="edit"
       ></grampsjs-form-select-object-list>
+
+      <h4 class="label">${this._('Citations')}</h4>
+      <grampsjs-form-select-citations
+        id="object-citation"
+        .appState="${this.appState}"
+        .citationHandles="${this.data?.citation_list || []}"
+      ></grampsjs-form-select-citations>
     `
   }
 }

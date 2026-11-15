@@ -6,6 +6,7 @@ import {html} from 'lit'
 
 import './GrampsjsFormString.js'
 import './GrampsjsFormSelectType.js'
+import './GrampsjsFormSelectCitations.js'
 
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 
@@ -48,7 +49,21 @@ class GrampsjsFormEditAttribute extends GrampsjsObjectForm {
         value="${this.data?.value || ''}"
       >
       </grampsjs-form-string>
+      ${this.#hasCitations
+        ? html` <h4 class="label">${this._('Citations')}</h4>
+            <grampsjs-form-select-citations
+              id="object-citation"
+              .appState="${this.appState}"
+              .citationHandles="${this.data?.citation_list || []}"
+            ></grampsjs-form-select-citations>`
+        : ''}
     `
+  }
+
+  get #hasCitations() {
+    return !['sources', 'citations'].includes(
+      this.attributeCategory.toLowerCase()
+    )
   }
 
   get #typeNameDefault() {

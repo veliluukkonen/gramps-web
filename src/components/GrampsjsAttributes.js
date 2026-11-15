@@ -64,6 +64,7 @@ export class GrampsjsAttributes extends GrampsjsEditableList {
     const data = {
       type: attr.type || '',
       value: attr.value || '',
+      citation_list: attr.citation_list || [],
     }
     this.dialogContent = html`
       <grampsjs-form-edit-attribute

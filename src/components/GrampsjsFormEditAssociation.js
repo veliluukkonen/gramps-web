@@ -6,6 +6,7 @@ import {html} from 'lit'
 
 import './GrampsjsFormString.js'
 import './GrampsjsFormSelectType.js'
+import './GrampsjsFormSelectCitations.js'
 
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 
@@ -62,26 +63,11 @@ class GrampsjsFormEditAssociation extends GrampsjsObjectForm {
       </p>
 
       <h4 class="label">${this._('Citations')}</h4>
-      <p>
-        <grampsjs-form-select-object-list
-          multiple
-          fixedMenuPosition
-          style="min-height: 300px;"
-          objectType="citation"
-          .appState="${this.appState}"
-          id="personref-citation-select"
-          label="${this._('Select')}"
-          .objectsInitial="${this.data.citation_list &&
-          this.data.citation_list.length
-            ? this.data.citation_list.map(handle => ({
-                object_type: 'citation',
-                object: {},
-                handle,
-              }))
-            : []}"
-          class="edit"
-        ></grampsjs-form-select-object-list>
-      </p>
+      <grampsjs-form-select-citations
+        id="object-citation"
+        .appState="${this.appState}"
+        .citationHandles="${this.data?.citation_list || []}"
+      ></grampsjs-form-select-citations>
 
       <h4 class="label">${this._('Notes')}</h4>
       <p>

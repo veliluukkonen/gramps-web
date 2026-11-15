@@ -24,6 +24,8 @@ export const GrampsjsNewMediaMixin = superClass =>
           </grampsjs-form-select-date>
         </p>
 
+        ${this._renderCitationForm?.() ?? ''}
+
         <div class="spacer"></div>
         <grampsjs-form-private
           id="private"

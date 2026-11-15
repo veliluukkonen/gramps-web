@@ -358,7 +358,12 @@ export class GrampsjsObjectForm extends GrampsjsAppStateMixin(LitElement) {
       this.data = {...this.data, note_list: e.detail.data}
     }
     if (originalTarget.id === 'name') {
-      this.data = e.detail.data
+      // the citations of the name are edited by a separate picker
+      this.data = {
+        ...e.detail.data,
+        citation_list:
+          this.data?.citation_list ?? e.detail.data?.citation_list ?? [],
+      }
     }
     if (originalTarget.id === 'srcattrtype') {
       this.data = {

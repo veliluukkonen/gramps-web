@@ -11,6 +11,7 @@ import '@material/mwc-button'
 import './GrampsjsFormSelectType.js'
 import './GrampsjsFormSelectObjectList.js'
 import './GrampsjsFormString.js'
+import './GrampsjsFormSelectCitations.js'
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 
 class GrampsjsFormChildRef extends GrampsjsObjectForm {
@@ -49,6 +50,13 @@ class GrampsjsFormChildRef extends GrampsjsObjectForm {
         .typesLocale="${this.typesLocale}"
       >
       </grampsjs-form-select-type>
+
+      <h4 class="label">${this._('Citations')}</h4>
+      <grampsjs-form-select-citations
+        id="object-citation"
+        .appState="${this.appState}"
+        .citationHandles="${this.data?.citation_list || []}"
+      ></grampsjs-form-select-citations>
     `
   }
 }

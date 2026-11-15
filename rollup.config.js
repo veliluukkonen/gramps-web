@@ -17,7 +17,10 @@ const developmentMode = process.env.ROLLUP_WATCH === 'true'
 
 const outputDir = 'dist'
 
-const swRegistrationScript = `<script>if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').then(function(){console.log('ServiceWorker registered.')}).catch(function(err){console.log('ServiceWorker registration failed: ',err)})})}</script>`
+// The new service worker takes over immediately (skipWaiting/clientsClaim),
+// so a normal reload always shows the latest deployed version. Updates are
+// also checked when the tab becomes visible again (long-lived tabs).
+const swRegistrationScript = `<script>if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').then(function(reg){console.log('ServiceWorker registered.');document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){reg.update().catch(function(){})}})}).catch(function(err){console.log('ServiceWorker registration failed: ',err)})})}</script>`
 
 export default {
   input: './index.html',
@@ -38,8 +41,8 @@ export default {
         swDest: path.join(outputDir, 'sw.js'),
         globDirectory: outputDir,
         globPatterns: ['**/*.{html,js,css,webmanifest}'],
-        skipWaiting: false,
-        clientsClaim: false,
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [{urlPattern: 'polyfills/*.js', handler: 'CacheFirst'}],
       }),
     ],

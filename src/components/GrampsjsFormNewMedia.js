@@ -4,6 +4,7 @@ import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
 import {GrampsjsNewMediaMixin} from '../mixins/GrampsjsNewMediaMixin.js'
 
 import './GrampsjsFormUpload.js'
+import './GrampsjsFormSelectCitations.js'
 
 import {fireEvent, emptyDate} from '../util.js'
 
@@ -27,6 +28,17 @@ export class GrampsjsFormNewMedia extends GrampsjsNewMediaMixin(
       </p>
 
       ${super.renderForm()}
+    `
+  }
+
+  _renderCitationForm() {
+    return html`
+      <h4 class="label">${this._('Citations')}</h4>
+      <grampsjs-form-select-citations
+        id="object-citation"
+        .appState="${this.appState}"
+        .citationHandles="${[]}"
+      ></grampsjs-form-select-citations>
     `
   }
 
